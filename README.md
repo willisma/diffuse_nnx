@@ -234,10 +234,11 @@ This project is licensed under the terms specified in the LICENSE file.
 If you use this library in your research, please cite:
 
 ```bibtex
-@software{DiffuseNNX,
-  title={DiffuseNNX: A JAX/NNX Library for Diffusion and Flow Matching},
+@misc{DiffuseNNX,
   author={Nanye Ma},
+  title={DiffuseNNX: A JAX/NNX Library for Diffusion and Flow Matching},
   year={2025},
+  publisher={Github},
   url={https://github.com/willisma/diffuse_nnx.git}
 }
 ```
