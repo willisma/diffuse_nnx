@@ -1,0 +1,31 @@
+jax[tpu]==0.5.0
+flax==0.10.2
+optax==0.2.4
+orbax-checkpoint==0.11.4
+tensorflow
+
+clu
+einops
+transformers
+timm
+
+ml_collections
+termcolor
+wandb
+webdataset
+
+google-api-core
+google-cloud-core
+google-cloud-storage
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.5.1
+torchvision==0.20.1
+
+# Documentation dependencies
+sphinx>=7.0.0
+pydata-sphinx-theme>=0.15.0
+myst-parser>=2.0.0
+sphinx-copybutton>=0.5.0
+sphinx-design>=0.5.0
+linkify-it-py>=2.0.0
