@@ -32,13 +32,6 @@ Create a simple DiT model:
        rngs=jax.random.PRNGKey(0)
    )
 
-   # Initialize parameters
-   key = jax.random.PRNGKey(0)
-   x = jnp.ones((1, 32, 32, 4))  # Input shape: (batch, height, width, channels)
-   t = jnp.ones((1,))            # Time steps
-   y = jnp.zeros((1,), dtype=jnp.int32) + 1000  # Class labels (1000 = unconditional)
-   params = model.init(key, x, t, y)
-
 Create an interface and sampler:
 
 .. code-block:: python
@@ -54,7 +47,9 @@ Create an interface and sampler:
 
    # Generate samples
    key = jax.random.PRNGKey(42)
-   samples = sampler.sample(interface, params, key, batch_size=4)
+   rngs = nnx.Rngs(0)
+   x = jax.random.normal(key, (4, 32, 32, 4))
+   samples = sampler.sample(rngs, interface, x)
 
 Training a Model
 ----------------
