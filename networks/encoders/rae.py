@@ -88,6 +88,9 @@ class RAE(nnx.Module):
             x = jax.image.resize(
                 x, (x.shape[0], self.encoder_input_size, self.encoder_input_size, x.shape[-1]), method='bicubic'
             )
+        
+        # our input is in the range of [-1, 1]
+        x = (x + 1.0) / 2.0
         x = (x - encoder_mean) / encoder_std
         z = self.encoder(x, deterministic=deterministic)
 
