@@ -2,6 +2,7 @@
 
 # built-in libs
 import os
+from pathlib import Path
 
 # external libs
 from absl import app, flags, logging
@@ -15,7 +16,7 @@ from utils import logging_utils, gcloud_utils
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string('workdir', None, 'Directory to store model data.')
-flags.DEFINE_string('bucket', None, 'Google Cloud Storage bucket.')
+flags.DEFINE_string('bucket', None, 'Google Cloud Storage bucket. Leave unset for local runs.')
 flags.DEFINE_string('prefix', 'diffuse_nnx', 'Prefix for the experiment directory.')
 
 config_flags.DEFINE_config_file(
@@ -30,6 +31,13 @@ def create_experiment_dir(bucket, prefix, workdir):
     num_files = gcloud_utils.count_directories(bucket, prefix)
     workdir = f"gs://{bucket}/{prefix}/{num_files:03d}_{workdir}"
     return workdir
+
+
+def prepare_local_workdir(workdir):
+    """Expand and create a local experiment directory."""
+    path = Path(workdir).expanduser().resolve()
+    path.mkdir(parents=True, exist_ok=True)
+    return str(path)
 
 
 def get_trainers(trainer):
@@ -48,11 +56,14 @@ def main(argv):
     prefix = FLAGS.prefix
     workdir = FLAGS.workdir
 
-    if gcloud_utils.directory_exists(bucket, prefix, workdir):
-        index = gcloud_utils.get_directory_index(bucket, prefix, workdir)
-        workdir = f"gs://{bucket}/{prefix}/{index:03d}_{workdir}"
+    if bucket:
+        if gcloud_utils.directory_exists(bucket, prefix, workdir):
+            index = gcloud_utils.get_directory_index(bucket, prefix, workdir)
+            workdir = f"gs://{bucket}/{prefix}/{index:03d}_{workdir}"
+        else:
+            workdir = create_experiment_dir(bucket, prefix, workdir)
     else:
-        workdir = create_experiment_dir(bucket, prefix, workdir)
+        workdir = prepare_local_workdir(workdir)
     
     if jax.process_index() == 0:
         logging.info('Current commit: ')
@@ -79,8 +90,8 @@ def main(argv):
 
     logging.info(FLAGS.config)
 
-    if jax.local_devices()[0].platform != 'tpu':
-        logging.error('Not using TPU. Exit.')
+    if jax.local_devices()[0].platform != 'tpu' and jax.local_devices()[0].platform != 'gpu':
+        logging.error('Not using TPU or GPU. Exit.')
         exit()
     
     logging.info("Start training with trainer: %s", FLAGS.config.trainer)
