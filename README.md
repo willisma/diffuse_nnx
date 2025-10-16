@@ -92,6 +92,7 @@ Please check `utils/` and `data/` for all other functionalities! In `docs/` we a
 ## Prerequisites
 
 - **Google Cloud Storage access**: Training and evaluation jobs stream checkpoints to a bucket via `--bucket`. Ensure you have access to [Google Cloud Storage Bucket](https://cloud.google.com/storage/docs/creating-buckets) before proceeding. Once that is established, run `gcloud auth application-default login` to generate the credential json file for the gcloud client api used by the codebase.
+- **Local Filesystem support**: Alternatively, you can omit the `--bucket` flag to use local filesystem for checkpoint storage.
 - **Weights & Biases authentication**: The logging helpers require an API key. Visit https://wandb.ai/authorize to copy it, then export it as `WANDB_API_KEY`. `WANDB_ENTITY` is also required to set up the specific WANDB space you want to work in.
 - **Secrets & environment loading**: Keep cloud keys out of source control. Store them in an `.env` file and source it in every shell before launching commands.
 
@@ -131,7 +132,7 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-**Note**: The codebase is mainly designed for using on Google Cloud TPU machines and haven't been extensively tested on GPUs. To use it on GPU, replace the `jax[tpu]` dependency in `requirements.txt` with `jax[cuda12]`. We greatly appreciate it if you can help validate the performances on GPU!
+**Note**: The codebase is mainly designed for using on Google Cloud TPU machines and haven't been extensively tested on GPUs. To use it on GPU, replace the `jax[tpu]==0.5.1` dependency in `requirements.txt` with `jax[cuda12]==0.5.1`. We greatly appreciate it if you can help validate the performances on GPU!
 
 ## Quick Start
 
