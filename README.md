@@ -92,7 +92,7 @@ Please check `utils/` and `data/` for all other functionalities! In `docs/` we a
 ## Prerequisites
 
 - **Google Cloud Storage access**: Training and evaluation jobs stream checkpoints to a bucket via `--bucket`. Ensure you have access to [Google Cloud Storage Bucket](https://cloud.google.com/storage/docs/creating-buckets) before proceeding. Once that is established, run `gcloud auth application-default login` to generate the credential json file for the gcloud client api used by the codebase.
-- **Local Filesystem support**: Alternatively, you can omit the `--bucket` flag to use local filesystem for checkpoint storage.
+- **Local Filesystem support**: Alternatively, you can omit the `--bucket` flag to use local filesystem for checkpoint storage. (Thanks @[Wenhao](https://github.com/rese1f) for the support!)
 - **Weights & Biases authentication**: The logging helpers require an API key. Visit https://wandb.ai/authorize to copy it, then export it as `WANDB_API_KEY`. `WANDB_ENTITY` is also required to set up the specific WANDB space you want to work in.
 - **Secrets & environment loading**: Keep cloud keys out of source control. Store them in an `.env` file and source it in every shell before launching commands.
 
